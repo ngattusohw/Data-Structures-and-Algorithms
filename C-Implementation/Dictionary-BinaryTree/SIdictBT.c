@@ -1,30 +1,119 @@
-/* Simple interface for dictionaries that map strings to integers. */
+/*
+    I pledge my honor that I have abided by the stevens honor system
+    Nick Gattuso
+*/
 
-#ifndef SIdict_H
-#define SIdict_H
+#include <stdlib.h>
+#include <stdio.h>
+#include <assert.h>
+#include <string.h>
 
+#include "SIdict.h"
 
-struct si_dict;
-typedef struct si_dict* SIdict;
+#define MAXKEYCHARS 32
 
-/* make an empty one */
-SIdict makeSIdict();
+void print(SIdict d);
 
-/* whether key is present 
-   Precondition: d and key are non-null. */
-int hasKey(SIdict d, char* key);
+typedef struct tnode* Tnode;
+struct tnode {
+    char key[MAXKEYCHARS];
+    int val;
+    Tnode left;
+    Tnode right;
+};
 
-/* map key to val; return 1 if key was already present else 0 
-   Precondition: d and key are non-null. */
-int addOrUpdate(SIdict d, char* key, int val);
+struct si_dict {
+    Tnode root;
+};
 
-/* get value associated with key
-   Precondition: d is non-null and key is present (so it's non-null). */
-int lookup(SIdict d, char* key);
+SIdict makeSIdict() {
+    SIdict dict = (SIdict) malloc(sizeof(struct si_dict));
+    dict->head = NULL;
+    return dict;
+}
 
-/* Remove key/val; return 1 if key was already present else 0
-   Precondition: d and key are non-null. */
-int remKey(SIdict d, char* key);
+int hasKey(SIdict d, char* key) {
+    int index = 1;
+    nodePtr curr = d->head;
 
+    while(curr != NULL) {
+        if(strcmp(key, curr->key) == 0)
+            return index;
+        curr = curr->next;
+        ++index;
+    }
 
-#endif
+    return 0;
+}
+
+int addOrUpdate(SIdict d, char* key, int val) {
+    int i, index;
+    nodePtr node = d->head;
+    //if it has, update
+    if((index = hasKey(d, key))) {
+        for(i=1; i < index && node != NULL; ++i)
+            node = node->next;
+        node->val = val;
+        //free mem
+        return 1;
+    }
+    //if it doesnt, make a new node
+    nodePtr temp = (nodePtr) malloc(sizeof(struct node));
+    temp->key = key;
+    temp->val = val;
+
+    //if the list dict is initally empty
+    if(d->head == NULL) {
+        node = NULL;
+    }
+    else {
+        node = d->head;
+    }
+
+    d->head = temp;
+    temp->next = node;
+
+    return 0;
+}
+
+int lookup(SIdict d, char* key){
+    nodePtr curr = d->head;
+    while(curr != NULL){
+        if(strcmp(key, curr->key) == 0){
+            return curr->val;
+        }
+        curr = curr->next;
+    }
+
+    return -1;
+}
+
+int remKey(SIdict d, char* key){
+    nodePtr prev = d->head;
+    nodePtr rem;
+
+    if(hasKey(d,key)==0){
+        return 0;
+    }
+    if(strcmp(key, d->head->key) == 0){
+        rem = d->head;
+        d->head = rem->next;
+    }else{
+        while(prev != NULL){
+            if(strcmp(key, prev->next->key) == 0){
+                //remove the node from the linked list
+                rem = prev->next;
+                prev->next = rem->next;
+                break;   
+            }else{
+                prev = prev->next;
+            }
+        }
+    }
+
+    rem->next = NULL;
+    rem->val = 0;
+    free(rem);
+    return 1;
+}
+
