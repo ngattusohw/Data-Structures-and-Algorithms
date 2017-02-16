@@ -14,9 +14,10 @@
 
 void print(SIdict d);
 
+
 typedef struct tnode* Tnode;
 struct tnode{
-    char key[MAXKEYCHARS];
+    char* key;
     int val;
     Tnode left;
     Tnode right;
@@ -25,6 +26,8 @@ struct tnode{
 struct si_dict{
     Tnode root;
 };
+
+int insertNode(Tnode root, Tnode new_node);
 
 SIdict makeSIdict() {
     SIdict dict = (SIdict) malloc(sizeof(struct si_dict));
@@ -52,31 +55,30 @@ int hasKey(SIdict d, char* key) {
 //string copy
 int addOrUpdate(SIdict d, char* key, int val) { 
     Tnode temp = (Tnode) malloc(sizeof(struct tnode));
-    strcpy(temp->key, key);
     temp->val = val;
+    temp->left = NULL;
+    temp->right = NULL;
+    
+    temp->key = (char*) malloc(sizeof(char) * MAXKEYCHARS);
+    strcpy(temp->key,key);
+    
 
     if(d->root == NULL){
         d->root = temp;
         return 0;
     }
 
+    int r = insertNode(d->root,temp);
 
-    printf("%s\n" , d->root->key);
-    printf("%s\n", temp->key);
+    // if(r==1){
+    //     free(temp);
+    // }
 
-    int r = insert(d->root,temp);
+    //find a more efficent way
 
-    printf("%s\n", "Out of insert..");
-
-    if(r==1){
-        free(temp);
-    }
-
-    printf("%s\n", "Hello");
-
-    return 0;
+    return r;
     
-    //if it doesnt, make a new node
+   
     
 
     
@@ -123,7 +125,7 @@ int remKey(SIdict d, char* key){
      return 1;
 }
 
-int insert(Tnode root, Tnode new_node) {
+int insertNode(Tnode root, Tnode new_node) {
    printf("%s\n"," IN insert");
    printf("%s\n", root->key);
    printf("%s\n", new_node->key);
@@ -141,7 +143,7 @@ int insert(Tnode root, Tnode new_node) {
         }
         else{
             printf("%s\n", "Left, contuning down");
-            insert(root->left, new_node);
+            insertNode(root->left, new_node);
         }
     }
 
@@ -153,7 +155,7 @@ int insert(Tnode root, Tnode new_node) {
         }
         else{
             printf("%s\n", "Right, contuning down");
-            insert(root->right, new_node);
+            insertNode(root->right, new_node);
         }
     }
 

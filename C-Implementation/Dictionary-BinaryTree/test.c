@@ -18,6 +18,7 @@
 
 void inorder(Tnode temp) {
    if (temp != NULL) {
+      printf("%s\n", "In inorder");
       inorder(temp->left);
       printf("%d\n", temp->val);
       inorder(temp->right);
@@ -27,11 +28,16 @@ void inorder(Tnode temp) {
 int main(){
 	SIdict dict = makeSIdict();
     addOrUpdate(dict, "Hello", 2);
+    printf("%s\n", "FIRST ADD COMPLETE");
     addOrUpdate(dict, "Ass", 300);
+    printf("%s\n", "SECOND ADD COMPLETE");
     addOrUpdate(dict, "Meow", 20);
-    inorder(dict->root);
-    addOrUpdate(dict, "Meow", 600);
-    inorder(dict->root);
+    printf("%s\n", "Third ADD COMPLETE");
+    //inorder(dict->root);
+    //addOrUpdate(dict, "Meow", 600);
+    addOrUpdate(dict, "Ass", 100);
+    //inorder(dict->root);
     //printf("%i\n", hasKey(dict, "Ass"));
+    inorder(dict->root);
 
 }
