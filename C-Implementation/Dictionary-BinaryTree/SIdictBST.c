@@ -85,13 +85,16 @@ int addOrUpdate(SIdict d, char* key, int val) {
 }
 
 int lookup(SIdict d, char* key){
-    // nodePtr curr = d->head;
-    // while(curr != NULL){
-    //     if(strcmp(key, curr->key) == 0){
-    //         return curr->val;
-    //     }
-    //     curr = curr->next;
-    // }
+    Tnode curr = d->root;
+
+    while(curr != NULL) {
+        if(strcmp(key, curr->key) == 0)
+            return curr->val;
+        else if(strcmp(key, curr->key)>0)
+            curr = curr->right;
+        else if(strcmp(key, curr->key)<0)
+            curr = curr->left;
+    }
 
      return -1;
  }
@@ -122,6 +125,25 @@ int remKey(SIdict d, char* key){
     // rem->next = NULL;
     // rem->val = 0;
     // free(rem);
+
+    if(hasKey(d,key)==0){
+        return 0;
+    }
+
+    Tnode curr = d->root;
+
+    if(strcmp(key,curr->key) == 0){
+        if(curr->) //remove the root, replace it with an inoder
+    }
+    while(curr != NULL) {
+        if(strcmp(key, curr->key) == 0)
+            return index;
+        else if(strcmp(key, curr->key)>0)
+            curr = curr->right;
+        else if(strcmp(key, curr->key)<0)
+            curr = curr->left;
+        ++index;
+    }
      return 1;
 }
 
