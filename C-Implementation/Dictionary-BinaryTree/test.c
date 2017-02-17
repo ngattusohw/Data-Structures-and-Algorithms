@@ -18,7 +18,7 @@
 
 void inorder(Tnode temp) {
    if (temp != NULL) {
-      printf("%s\n", "In inorder");
+     // printf("%s\n", "In inorder");
       inorder(temp->left);
       printf("%d\n", temp->val);
       inorder(temp->right);

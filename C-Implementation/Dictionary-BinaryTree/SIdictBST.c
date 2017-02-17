@@ -60,7 +60,7 @@ int addOrUpdate(SIdict d, char* key, int val) {
     temp->right = NULL;
     
     temp->key = (char*) malloc(sizeof(char) * MAXKEYCHARS);
-    strcpy(temp->key,key);
+    strncpy(temp->key,key,MAXKEYCHARS);
     
 
     if(d->root == NULL){
@@ -131,18 +131,60 @@ int remKey(SIdict d, char* key){
     }
 
     Tnode curr = d->root;
+    Tnode prev = curr;
+    //three cases
 
-    if(strcmp(key,curr->key) == 0){
-        if(curr->) //remove the root, replace it with an inoder
-    }
     while(curr != NULL) {
-        if(strcmp(key, curr->key) == 0)
-            return index;
-        else if(strcmp(key, curr->key)>0)
+        if(strcmp(key, curr->key) == 0){
+            if(curr->left == NULL && curr->right == NULL){
+                if(curr==d->root){
+                    d->root = NULL;
+                    return 1;
+                }else{
+                    if(strcmp(curr->key,prev->key) < 0){
+                        free(prev->left);
+                        prev->left = NULL;
+                        return 1;
+                    }else if(strcmp(curr->key,prev->key) > 0){
+                        free(prev->right);
+                        prev->right = NULL;
+                        return 1;
+                    }
+                }
+            }else if(curr->left == NULL){
+                if(strcmp(curr->key,prev->key) < 0){
+                    prev->left = curr->right;
+                    free(curr);
+                    curr = NULL;
+                }else if(strcmp(curr->key,prev->key) > 0){
+                    prev->right = curr->right;
+                    free(curr);
+                    curr = NULL;
+                }
+            }else if(curr->right == NULL){
+                if(strcmp(curr->key,prev->key) < 0){
+                    prev->left = curr->left;
+                    free(curr);
+                    curr = NULL;
+                }else if(strcmp(curr->key,prev->key) > 0){
+                    prev->right = curr->left;
+                    free(curr);
+                    curr = NULL;
+                }
+            }else{
+                //swap rightmost of left tree
+            }
+
+        }
+        //keep checking..
+        else if(strcmp(key, curr->key)>0){
+            prev = curr;
             curr = curr->right;
-        else if(strcmp(key, curr->key)<0)
+        }
+        else if(strcmp(key, curr->key)<0){
+            prev = curr;
             curr = curr->left;
-        ++index;
+        }
     }
      return 1;
 }
@@ -157,7 +199,7 @@ int insertNode(Tnode root, Tnode new_node) {
         return 1;
     }
 
-    if (new_node->val < root->val) {
+    if (strcmp(new_node->key, root->key) < 0) {
         if (root->left == NULL){
             root->left = new_node;
             printf("%s\n", "left making new node");
@@ -169,7 +211,7 @@ int insertNode(Tnode root, Tnode new_node) {
         }
     }
 
-    if (new_node->val > root->val) {
+    if (strcmp(new_node->key, root->key) > 0) {
         if (root->right == NULL){
             root->right = new_node;
             printf("%s\n", "Right making new node");
