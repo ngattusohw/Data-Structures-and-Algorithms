@@ -6,38 +6,46 @@
 #include <stdio.h>
 #include "SIdictBST.c"
 
-
-// void print(SIdict d) {
-//     nodePtr curr = d->head;
-
-//     while(curr != NULL) {
-//         printf("%s\t%d\n", curr->key, curr->val);
-//         curr = curr->next;
-//     }
-// }
-
 void inorder(Tnode temp) {
    if (temp != NULL) {
      // printf("%s\n", "In inorder");
       inorder(temp->left);
-      printf("%d\n", temp->val);
+      printf("%s\n", temp->key);
       inorder(temp->right);
    }
 }
 
 int main(){
 	SIdict dict = makeSIdict();
-    addOrUpdate(dict, "Hello", 2);
-    printf("%s\n", "FIRST ADD COMPLETE");
-    addOrUpdate(dict, "Ass", 300);
-    printf("%s\n", "SECOND ADD COMPLETE");
-    addOrUpdate(dict, "Meow", 20);
-    printf("%s\n", "Third ADD COMPLETE");
-    //inorder(dict->root);
-    //addOrUpdate(dict, "Meow", 600);
-    addOrUpdate(dict, "Ass", 100);
-    //inorder(dict->root);
-    //printf("%i\n", hasKey(dict, "Ass"));
+    addOrUpdate(dict, "First", 10);
+    addOrUpdate(dict, "Second", 20);
+    addOrUpdate(dict, "Third", 30);
+    addOrUpdate(dict, "Fourth" , 40);
+    addOrUpdate(dict, "Fifth" , 50);
+
     inorder(dict->root);
+    addOrUpdate(dict, "Fifth" , 500);
+
+    inorder(dict->root);
+
+    printf("%i\n", lookup(dict, "Fifth"));
+    printf("%i\n", lookup(dict, "not here!"));
+    printf("%i\n", hasKey(dict, "First"));
+
+    printf("%i\n",remKey(dict, "First"));
+    inorder(dict->root);
+    printf("%i\n", remKey(dict, "Second"));
+    inorder(dict->root);
+    printf("%i\n", remKey(dict, "Fourth"));
+    inorder(dict->root);
+    printf("%i\n", remKey(dict, "Third"));
+    inorder(dict->root);
+    printf("%i\n", remKey(dict, "Fifth"));
+    addOrUpdate(dict, "Fifth" , 20000);
+    printf("%i\n", remKey(dict, "Fifth"));
+
+    inorder(dict->root);
+
+
 
 }
