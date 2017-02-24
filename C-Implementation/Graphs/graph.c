@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <assert.h>
 #include <string.h>
+#include <math.h>
 
 #include "graph.h"
 
@@ -34,11 +35,18 @@ Graph makeGraph(int n, int rep){
 	theGraph->representation = rep;
 
 	if(rep == 0){
-   theGraph->mat = makeMatrix(n);
+    theGraph->mat = makeMatrix(n);
+    int x,y;
+    for(x=0;x<n;x++){
+      for(y=0;y<n;y++){
+        theGraph->mat[x][y]=-1;
+      }
+    }
 	}else if(rep == 1){
     theGraph->list = makeList(n);
   }
 
+  return theGraph;
 }
 
 
@@ -49,12 +57,12 @@ Graph cloneGraph(Graph G, int rep){
   Graph testGraph = (Graph) malloc(sizeof(struct graph));
   testGraph->numVert = G->numVert;
   
-
   if(rep == 0){
     if(G->representation == 0){
       //if its matrix and we have a matrix
       testGraph->representation = 0;
       testGraph->mat = makeMatrix(G->numVert);
+      testGraph->numVert = G->numVert;
       int x,y;
       for(x=0;x<G->numVert;x++){
         for(y=0;y<G->numVert;y++){
@@ -63,8 +71,9 @@ Graph cloneGraph(Graph G, int rep){
       }
       return testGraph;
     }else{
-      testGraph->representation = 1;
+      testGraph->representation = 0;
       testGraph->mat = makeMatrix(G->numVert);
+      testGraph->numVert = G->numVert;
       //if its matrix and we have a list
       int x;
       for(x=0;x<G->numVert;x++){
@@ -81,13 +90,33 @@ Graph cloneGraph(Graph G, int rep){
       //if its list and we have a list
       testGraph->representation = 1;
       testGraph->list = makeList(G->numVert);
+      testGraph->numVert = G->numVert;
+      int x;
+      NodePtr curr;
+      for(x=0;x<G->numVert;x++){
+        if(G->list[x]!=NULL){
+          curr = G->list[x];
+        }else{
+          continue;
+        }
+        testGraph->list[x] = G->list[x];
+        NodePtr temp = testGraph->list[x];
+        
+        while(curr->next!=NULL){
+          temp->next=curr->next;
+          curr = curr->next;
+          temp=temp->next;
+        }
+      }
+      return testGraph;
+    }else{
+      testGraph->representation = 1;
+      testGraph->list = makeList(G->numVert);
+      testGraph->numVert = G->numVert;
 
       
-      for(x=0;x<G->numVert;x++){
-        NodePtr curr = G->list[x];
-      }
-    }else{
-      testGraph->representation = 0;
+      return testGraph;
+
       //if its a list and we have a matrix
     }
   }
@@ -98,7 +127,7 @@ Graph cloneGraph(Graph G, int rep){
    Postcondition: g is no longer a valid pointer. 
 */
 void disposeGraph(Graph G){
-
+  return;
 }
 
 
@@ -114,7 +143,55 @@ int numVerts(Graph G){
    Otherwise, make no change and return ERROR. 
 */
 int addEdge(Graph G, int source, int target, float w){
+  if(source < G->numVert && target < G->numVert){
 
+    if(G->representation==0){
+      //if its a matrix
+      if(G->mat[source][target]==-1){
+        G->mat[source][target] = w;
+        return OK;
+      }else{
+        return ERROR;
+      }
+    }else if(G->representation==1){
+      //if its a list
+      int x;
+      
+      NodePtr firstcurr = G->list[source];
+      NodePtr prev;
+      while(firstcurr!=NULL){
+        if(firstcurr->verts == target){
+          return ERROR;
+        }
+        prev = firstcurr;
+        firstcurr = firstcurr->next;
+      }
+      
+
+      NodePtr curr = G->list[source];
+      if(curr == NULL){
+        G->list[source] = (NodePtr) malloc(sizeof(struct node));
+        G->list[source]->weight = w;
+        G->list[source]->verts = target;
+        G->list[source]->next = NULL;
+        return OK;
+      }
+
+      while(curr->next!=NULL){
+        curr = curr->next;
+      }
+
+      NodePtr new_node = (NodePtr) malloc(sizeof(struct node));
+      new_node->weight = w;
+      new_node->verts = target;
+      curr->next = new_node;
+
+      return OK;
+
+    }
+  }else{
+    return ERROR;
+  }
 }
 
 
@@ -123,7 +200,38 @@ int addEdge(Graph G, int source, int target, float w){
    Otherwise, make no change and return ERROR. 
 */
 int delEdge(Graph G, int source, int target){
-
+  if(G->representation==0){
+    //if its a matrix
+    if(G->mat[source][target]!=-1){
+      G->mat[source][target]=-1;
+      return OK;
+    }else{
+      return ERROR;
+    }
+  }else if(G->representation==1){
+    //if its a list
+    NodePtr curr = G->list[source];
+    NodePtr prev = curr;
+    if(curr==NULL){
+      return ERROR;
+    }
+    if(curr->verts==target){
+      G->list[source] = G->list[source]->next;
+      prev->verts=0;
+      prev->weight=0;
+      prev=NULL;
+      free(prev);
+      return OK;
+    }
+    while(curr->next!=NULL){
+      if(curr->next->verts==target){
+        curr->next = curr->next->next;
+        return OK;
+      }
+      curr = curr->next;
+    }
+    return ERROR;
+  }
 }
 
 
@@ -132,6 +240,32 @@ int delEdge(Graph G, int source, int target){
    Return -1.0 if source or target are out of range.
 */
 float edge(Graph G, int source, int target){
+  if(source < G->numVert && target < G->numVert){
+    if(G->representation==0){
+      if(G->mat[source][target]!=-1){
+        return G->mat[source][target];
+      }else{
+        return INFINITY;
+      }
+    }else if(G->representation==1){
+      //printf("%s\n", "HERE");
+      NodePtr curr = G->list[source];
+      if(curr == NULL){
+
+      }
+      while(curr!=NULL){
+        if(curr->verts == target){
+          return curr->weight;
+        }else{
+          curr = curr->next;
+        }
+      }
+
+      return INFINITY;
+    }
+  }else{
+    return -1.0;
+  }
 
 }
 
@@ -143,7 +277,7 @@ float edge(Graph G, int source, int target){
    Ownersip: the caller is responsible for freeing the array.
 */
 int* successors(Graph G, int source){
-
+  
 }
 
 
@@ -166,5 +300,11 @@ Matrix makeMatrix(int n){
 }
 
 List makeList(int n){
-  return (NodePtr*)malloc(n * sizeof(NodePtr*));
+  List temp = (NodePtr*)malloc(n * sizeof(struct node));
+  int x;
+  for(x=0;x<n;x++){
+    temp[x] = NULL;
+  }
+
+  return temp;
 }
