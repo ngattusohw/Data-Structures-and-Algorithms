@@ -6,6 +6,25 @@
 
 #include "graph.h"
 
+
+/*
+  I pledge my honor that I have abided by the stevens honor system
+  Nick Gattuso
+
+
+  ex1 :: x(1) + 5 * (n-1) = 5(n-1)
+    b) 3^(n-1)x(1)=4 * 3^(n-1)
+    c)(n(n+1))/2
+    d) 2n-1
+    e) 1+log(base3)n
+  ex4 :: q(n-1) + 2n -1 = n^2
+    b) M(n) = n-1
+    c) C(n) = 3(n-1)
+
+    Most of my time complexities will be O(n^2) , because I need to traverse through
+    the matrix will 2 for loops, or a for loop and a while loop for List
+*/
+
 typedef struct node* NodePtr;
 typedef float** Matrix;
 typedef NodePtr* List;
@@ -54,72 +73,27 @@ Graph makeGraph(int n, int rep){
    specified by rep (which is assumed to be MATRIX or LIST) 
 */
 Graph cloneGraph(Graph G, int rep){
-  Graph testGraph = (Graph) malloc(sizeof(struct graph));
-  testGraph->numVert = G->numVert;
-  
-  if(rep == 0){
-    if(G->representation == 0){
-      //if its matrix and we have a matrix
-      testGraph->representation = 0;
-      testGraph->mat = makeMatrix(G->numVert);
-      testGraph->numVert = G->numVert;
-      int x,y;
-      for(x=0;x<G->numVert;x++){
-        for(y=0;y<G->numVert;y++){
-          testGraph->mat[x][y]=G->mat[x][y];
+  Graph clone = makeGraph(G->numVert,rep);
+  if(G->list == NULL){
+    int x,y;
+    for(x=0;x<G->numVert;x++){
+      for(y=0;y<G->numVert;y++){
+        if(G->mat[x][y] != -1){
+          addEdge(clone,x,y,G->mat[x][y]);
         }
       }
-      return testGraph;
-    }else{
-      testGraph->representation = 0;
-      testGraph->mat = makeMatrix(G->numVert);
-      testGraph->numVert = G->numVert;
-      //if its matrix and we have a list
-      int x;
-      for(x=0;x<G->numVert;x++){
-        NodePtr curr = G->list[x];
-        while(curr!=NULL){
-          testGraph->mat[x][curr->verts] = curr->weight;
-          curr = curr->next;
-        }
-      }
-      return testGraph;
     }
   }else{
-    if(G->representation == 1){
-      //if its list and we have a list
-      testGraph->representation = 1;
-      testGraph->list = makeList(G->numVert);
-      testGraph->numVert = G->numVert;
-      int x;
-      NodePtr curr;
-      for(x=0;x<G->numVert;x++){
-        if(G->list[x]!=NULL){
-          curr = G->list[x];
-        }else{
-          continue;
-        }
-        testGraph->list[x] = G->list[x];
-        NodePtr temp = testGraph->list[x];
-        
-        while(curr->next!=NULL){
-          temp->next=curr->next;
-          curr = curr->next;
-          temp=temp->next;
-        }
+    int x;
+    for(x=0;x<G->numVert;x++){
+      NodePtr curr=G->list[x];
+      while(curr!=NULL){
+        addEdge(clone, x, curr->verts, curr->weight);
+        curr = curr->next;
       }
-      return testGraph;
-    }else{
-      testGraph->representation = 1;
-      testGraph->list = makeList(G->numVert);
-      testGraph->numVert = G->numVert;
-
-      
-      return testGraph;
-
-      //if its a list and we have a matrix
     }
   }
+  return clone;
 }
 
 
@@ -127,6 +101,12 @@ Graph cloneGraph(Graph G, int rep){
    Postcondition: g is no longer a valid pointer. 
 */
 void disposeGraph(Graph G){
+  if(G->representation==MATRIX){
+    //i dont have time for thisss
+  }else if(G->representation==LIST){
+
+  }
+  free(G);
   return;
 }
 
@@ -277,7 +257,34 @@ float edge(Graph G, int source, int target){
    Ownersip: the caller is responsible for freeing the array.
 */
 int* successors(Graph G, int source){
-  
+  int* err = (int*) malloc(sizeof(int));
+  err[0]=-1;
+
+  int* succ = (int*) malloc(G->numVert+1 * sizeof(int));
+  int counter = 0;
+  if(G->representation==MATRIX){
+    int x;
+    for(x=0;x<G->numVert;x++){
+      if(G->mat[source][x]!=-1){
+        succ[counter] = G->mat[source][x];
+        counter++;
+      }
+    }
+
+    succ[counter] = -1;
+    return succ;
+
+  }else if(G->representation==LIST){
+    NodePtr curr = G->list[source];
+    while(curr!=NULL){
+      succ[counter] = curr->verts;
+      counter++;
+      curr = curr->next;
+    }
+    succ[counter] = -1;
+    return succ;
+  }
+  return err;
 }
 
 
@@ -288,7 +295,43 @@ int* successors(Graph G, int source){
    Ownersip: the caller is responsible for freeing the array.
 */
 int* predecessors(Graph G, int target){
+  int* err = (int*) malloc(sizeof(int));
+  err[0]=-1;
 
+  int* pre_succ = malloc( G->numVert+1 * sizeof(int));
+  int counter = 0;
+
+  if(G->representation==MATRIX){
+    int x;
+    for(x=0;x<G->numVert;x++){
+      if(G->mat[x][target]!=-1){
+        pre_succ[counter] = G->mat[x][target];
+        counter++;
+      }
+    }
+
+    pre_succ[counter] = -1;
+    return pre_succ;
+
+  }else if(G->representation==LIST){
+    int x;
+    for(x=0;x<G->numVert;x++){
+      NodePtr curr = G->list[x];
+
+      while(curr!=NULL){
+        if(curr->verts == target){
+          pre_succ[counter] = x;
+          counter++;
+          curr = curr->next;
+        }
+      }
+    }
+
+    pre_succ[counter] = -1;
+    return pre_succ;
+
+  }
+  return err;
 }
 
 Matrix makeMatrix(int n){
