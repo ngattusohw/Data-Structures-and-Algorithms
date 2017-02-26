@@ -1,5 +1,18 @@
-#ifndef GRAPH_H
-#define GRAPH_H
+#ifndef	GRAPH_H
+#define	GRAPH_H	
+
+/* Simple interface for weighted directed graphs.
+
+   The vertices are numbered 0 .. n-1 for some fixed n.
+   Edges have nonnegative weights.
+
+   The two standard graph representations are supported.
+   Function cloneGraph() can be used to convert between 
+   representations.
+
+   Precondition: all functions except makeGraph assume their
+   Graph argument is non-null.
+*/
 
 #define MATRIX 0
 #define LIST 1
@@ -7,52 +20,72 @@
 #define OK 0
 #define ERROR 1
 
-struct graph; //need a numVents, struct needs to account for matrix and list
-typedef struct graph* Graph; 
 
-/*Make an empty graph with n vertices, using adjacecy matrix or adjaceny
-lists depending on whether rep==MATRIX or rep==LIST
-Pre: n>=1 */
+struct graph;
+typedef struct graph* Graph;
 
+
+/* Make an empty graph with n vertices, using either adjacency matrix 
+   or adjacency lists depending on whether rep==MATRIX or rep==LIST.
+   Precondition: n>=1 and rep is MATRIX or LIST.
+*/
 Graph makeGraph(int n, int rep);
 
-/* make a copy of g, but using the repesentation specified by rep (which
-is assumed to be MATRIX or LIST) */
 
+/* make a copy of g, but using the representation
+   specified by rep (which is assumed to be MATRIX or LIST) 
+*/
 Graph cloneGraph(Graph G, int rep);
 
-/*free the graph object and all its recources. Post condition: g is
-no longer a valid pointer. Alert: the caller should set their variable
-to null */
 
+/* free the graph object and all its resources.
+   Postcondition: g is no longer a valid pointer. 
+*/
 void disposeGraph(Graph G);
 
-/* num of vertices */
 
+/* number of vertices */
 int numVerts(Graph G);
 
-/* add edge from source to target with weight w, and return OK,
-if source and target are alid vertex numbers and there was no edge ..
-*/
 
+/* add edge from source to target with weight w, and return
+   OK, if source and target are valid vertex numbers and
+   there was no edge from source to target initially.
+   Otherwise, make no change and return ERROR. 
+*/
 int addEdge(Graph G, int source, int target, float w);
 
-/* delete edge from source to target, and return OK, if there was an
-edge from source. Otherwise, make not change and return ERROR */
 
+/* delete edge from source to target, and return
+   OK, if there was an edge from source.
+   Otherwise, make no change and return ERROR. 
+*/
 int delEdge(Graph G, int source, int target);
 
-/* return weight of the edge from souce to target, if there is one:
-otherwise return INFINITY. Return -1.0 if source or target are out-of
--range */
 
+/* return weight of the edge from source to target,
+   if there is one; otherwise return INFINITY.
+   Return -1.0 if source or target are out of range.
+*/
 float edge(Graph G, int source, int target);
 
-/* a freshly allocated array with the successor vertices of source
-if any, followed by an entry with -1 to indicate end ..
-Pre: source is in range. 
-Returns: Poiner to int array? */
 
+/* a freshly allocated array with the successor
+   vertices of source, if any, followed by an entry with -1
+   to indicate end of sequence.
+   Precondition: source is in range.
+   Ownersip: the caller is responsible for freeing the array.
+*/
 int* successors(Graph G, int source);
 
-int* predecessors(Graph G, int source);
+
+/* a freshly allocated array with the predecessor
+   vertices of target, if any, followed by an entry with -1
+   to indicate end of sequence.
+   Precondition: target is in range.
+   Ownersip: the caller is responsible for freeing the array.
+*/
+int* predecessors(Graph G, int target);
+
+
+#endif

@@ -9,6 +9,7 @@
 #include <string.h>
 
 #include "SIdict.h"
+#include "testscript.c"
 
 #define MAXKEYCHARS 32
 

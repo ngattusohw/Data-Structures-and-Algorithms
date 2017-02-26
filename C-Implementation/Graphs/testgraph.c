@@ -13,10 +13,20 @@ void test1(int rep) {
     Graph g = makeGraph(10, rep);
 
     // make some edges
-    addEdge(g, 0, 1, 0.0); addEdge(g, 0, 2, 0.0);
-    addEdge(g, 1, 0, 0.0); addEdge(g, 1, 1, 1.0); addEdge(g, 1, 2, 2.0);
+    printf("%i\n", addEdge(g, 0, 1, 0.0)); 
+    addEdge(g, 0, 2, 0.0);
+    addEdge(g, 1, 0, 0.0); 
+    addEdge(g, 1, 1, 1.0); 
+    addEdge(g, 1, 2, 2.0);
 
-    // print some successors
+    for(int i = 0; i < 5; i++){
+        for(int j =0; j < 5; j++){
+            printf("%f ", edge(g,i,j));
+        }
+        printf("\n");
+    }
+
+    //print some successors
     int* s0 = successors(g, 0);
     int i = 0;
     while (s0[i] != -1) {
@@ -52,6 +62,32 @@ void test1(int rep) {
     }
     free(s0);
     printf("\n");
+
+    for(int i = 0; i < 5; i++){
+        for(int j =0; j < 5; j++){
+            printf("%f ", edge(g,i,j));
+        }
+        printf("\n");
+    }
+
+    printf("\n");
+    for(int i = 0; i < 5; i++){
+        for(int j =0; j < 5; j++){
+            printf("%f ", edge(g,i,j));
+        }
+        printf("\n");
+    }
+
+
+    Graph clone = cloneGraph(g, LIST);
+
+    printf("\n");
+    for(int i = 0; i < 5; i++){
+        for(int j =0; j < 5; j++){
+            printf("%f ", edge(g,i,j));
+        }
+        printf("\n");
+    }
 
     // clean up
     disposeGraph(g);

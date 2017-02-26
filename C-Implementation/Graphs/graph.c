@@ -74,7 +74,7 @@ Graph makeGraph(int n, int rep){
 */
 Graph cloneGraph(Graph G, int rep){
   Graph clone = makeGraph(G->numVert,rep);
-  if(G->list == NULL){
+  if(G->representation == MATRIX){
     int x,y;
     for(x=0;x<G->numVert;x++){
       for(y=0;y<G->numVert;y++){
@@ -83,7 +83,7 @@ Graph cloneGraph(Graph G, int rep){
         }
       }
     }
-  }else{
+  }else if(G->representation == LIST){
     int x;
     for(x=0;x<G->numVert;x++){
       NodePtr curr=G->list[x];
@@ -102,11 +102,29 @@ Graph cloneGraph(Graph G, int rep){
 */
 void disposeGraph(Graph G){
   if(G->representation==MATRIX){
-    //i dont have time for thisss
+    for(int x=0;x<G->numVert;x++){
+      for(int y=0;y<G->numVert;y++){
+        
+      }
+    }
   }else if(G->representation==LIST){
-
+    for(int x=0;x<G->numVert;x++){
+      NodePtr curr = G->list[x];
+      NodePtr del = curr;
+      while(curr!=NULL){
+        del = curr;
+        del->verts = 0;
+        del->weight = 0;
+        curr = curr->next;
+        free(del);
+      }
+    }
   }
-  free(G);
+
+    G->numVert = 0;
+    G=NULL;
+    free(G);
+  
   return;
 }
 
