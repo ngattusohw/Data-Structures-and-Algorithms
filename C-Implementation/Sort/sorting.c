@@ -12,7 +12,13 @@
  * 
  * Use the insertion sort algorithm, with binary search to find the insertion point.
  */
-void insertionsort(char* arr[], int l, int r);
+void insertionsort(char* arr[], int l, int r){
+    //use strcmp for comparisons
+    
+
+
+
+}
 
 /*
 Helper method for quicksort
