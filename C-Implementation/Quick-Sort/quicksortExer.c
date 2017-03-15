@@ -25,29 +25,29 @@ void swap(int arr[], int i, int j) {
  * 
 */
 int partition(int arr[], int l, int r){
-    int pivot = arr[l];
-        int temp=0;
-        int low = l-1;
-        int high = r+1;
+int pivot = arr[l];
+    int temp=0;
+    int low = l-1;
+    int high = r+1;
 
-        while(1){
+    while(1){
+        low++;
+        while(low<r && arr[low] < pivot){ 
             low++;
-            while(low<r && arr[low] < pivot){ 
-                low++;
-            }
-            high--;
-            while(high>l && arr[high] > pivot){
-                high--;
-            }
-            if (low < high) {
-                temp = arr[low];
-                arr[low] = arr[high];
-                arr[high] = temp;
-            }else{
-                return (high);
-            }
-
         }
+        high--;
+        while(high>l && arr[high] > pivot){
+            high--;
+        }
+        if (low < high) {
+            temp = arr[low];
+            arr[low] = arr[high];
+            arr[high] = temp;
+        }else{
+            return (high);
+        }
+
+    }
 }
 
 /* Sort arr[l:r] in place, using the quicksort algorithm.
