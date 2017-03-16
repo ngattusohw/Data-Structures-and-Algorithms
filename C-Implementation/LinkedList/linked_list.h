@@ -20,4 +20,8 @@ void insertNode(LList the_list, int v);
 
 void removeNode(LList the_list, int v);
 
-void printStack(Stack s);
+void printList(LList the_list);
+
+int getCount(LList the_list);
+
+//LList reverseList(LList the_list);
