@@ -3,6 +3,7 @@
 #include <assert.h>
 #include <string.h>
 #include <time.h>
+#include "sorting.h"
 
 /* Demonstration of getting timing measurements for sorting sizeable arrays. 
  * Uses test files from Project Gutenberg http://www.gutenberg.org/
@@ -66,7 +67,7 @@ void testsort(char* filename, int numwords, int wordlen) {
     for (int j = 0; j < NUM_REPEAT; j++) {
         for (int i = 0; i < actualwords; i++)
             copy[i] = big[i];
-        quacksort(copy, 0, actualwords);
+        insertionsort(copy, 0, actualwords);
     }
 
     /* stop timing and print duration */
@@ -81,10 +82,20 @@ void testsort(char* filename, int numwords, int wordlen) {
 /* Run some tests.  ALERT: I've hard coded the data sizes. 
 */
 int main(int argc, char* argv[]) {
+    
+    char* it[] = {"B" , "D" , "Y", "Z", "A", "N" , "A" , "B", "W" , "P"};
+    quicksortPlus(it,0,10);
+    for(int x=0;x<10;x++){
+        printf("%s\n", it[x]);
+    }
+
+    
+
 
     testsort("statesContig.txt", 267, 3);  
-    testsort("3esl.txt", 23427, 21);  
-    testsort("chromosome4.txt", 170617, 61); 
+    testsort("3esl.txt", 23427, 21);
+    compareSorts(it, 10);  
+    //testsort("chromosome4.txt", 170617, 61); 
 //    testsort("war+peace.txt", 564264, 32); /* May not work in linux-lab */
 
 }
