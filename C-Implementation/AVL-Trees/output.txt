@@ -1,0 +1,34 @@
+banana
+   apple
+      .
+      .
+   jackfruit
+      honeydew
+         .
+         .
+      orange
+         .
+         .
+
+
+After adding pomegranate and mango
+
+jackfruit
+   banana
+      apple
+         .
+         .
+      honeydew
+         .
+         .
+   orange
+      mango
+         .
+         .
+      pomegranate
+         pineapple
+            .
+            .
+         .
+
+testSVdict successful
