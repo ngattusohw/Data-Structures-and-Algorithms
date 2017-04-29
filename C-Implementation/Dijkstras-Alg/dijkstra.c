@@ -1,0 +1,101 @@
+#include "dijkstra.h"
+#include "graph.h"
+#include "graphio.h"
+#include "minprio.h"
+#include <stdlib.h>
+#include <math.h>
+#include <stdio.h>
+
+//it can be 0 or 1 but it has to be 1 because its always reflexive
+
+/* Print the lengths and predecessor in a shortest path from s,
+ * for each vertex that is reachable from s.  (For vertices that  
+ * are not reachable from s, print nothing.)  Also print the 
+ * name of the predecessor in a shortest path.
+ *
+ * Assume GI is non-null and valid.
+ * Assume the source number, s, is in the graph GI->graph.
+ * 
+ * Use Dijkstra's algorithm and an implementation of minprio.h.
+ * Use a format like this to show length and predecessor:
+ * 
+ * Shortest paths from vertex A 
+ *   to B is 9.000000 via E
+ *   to C is 10.000000 via B
+ *   to D is 6.000000 via A
+ *   to E is 7.000000 via A
+ *   to F is 15.000000 via C
+ */
+
+struct elements{
+	int vertex; 
+	float weight;
+};
+typedef struct elements* Elements;
+
+int comp(void* temp1, void* temp2){
+	Elements Eltemp1 = (Elements)temp1;
+	Elements Eltemp2 = (Elements)temp2;
+
+	if(Eltemp1->weight < Eltemp2->weight){
+		return -1;
+	}else if(Eltemp1->weight > Eltemp2->weight){
+		return 1;
+	}else{
+		return 0;
+	}
+}
+
+Elements makeElement(int vertex, float weight){
+	Elements el = (Elements) malloc(sizeof(struct elements));
+	el->vertex = vertex;
+	el->weight = weight;
+	return el;
+}
+
+void shortestPaths(GraphInfo GI, int s){
+
+	int distance[numVerts(GI->graph)];
+	Handle* the_handle = (Handle*) malloc(numVerts(GI->graph) * sizeof(Handle));
+	int pred[numVerts(GI->graph)];
+	
+	MinPrio the_q = makeQueue(comp, numVerts(GI->graph));
+	the_handle[s] = enqueue(the_q, (void*) makeElement(s, 0));
+	distance[s] = 0;
+
+	for(int x=0;x<numVerts(GI->graph);x++){
+		pred[x] = -1;
+		if(x!=s){
+			the_handle[x] = enqueue(the_q, (void*) makeElement(x, INFINITY));
+			distance[x] = INFINITY;
+		}
+	}
+
+	while(nonempty(the_q)){
+		Elements minElem = dequeueMin(the_q);
+		int v = minElem->vertex;
+		int* succArray = successors(GI->graph, v); 
+		for (int i = 0; succArray[i] != -1; i++){
+			Handle b = the_handle[succArray[i]]; //index succArray[i]
+			Elements hold_i = (Elements) b->content;
+			//if(edge(GI->graph,v,i)!=INFINITY){
+			
+				if((minElem->weight + edge(GI->graph,v,succArray[i])) < distance[succArray[i]]){
+					distance[succArray[i]] = minElem->weight + edge(GI->graph,v,succArray[i]);
+					//update the content in the_handle[]
+					hold_i->weight = minElem->weight + edge(GI->graph,v,succArray[i]);
+					decreasedKey(the_q,b); 
+					pred[succArray[i]] = v; // this 
+				}
+			//} if theres no path dont print it out
+		}	
+	}
+
+	printf("%s %s\n", "Shortest path from vertex " , GI->vertnames[s]);
+	for(int y=0;y<numVerts(GI->graph);y++){
+		if(pred[y]!=-1)
+			printf("%s %s %s %i %s %s\n", "to " , GI->vertnames[y], " is " , distance[y], " via " , GI->vertnames[pred[y]]);
+	}
+
+
+}
