@@ -62,9 +62,9 @@ int main(){
 	printArr(it);
 
 	//printf("%s\n", "hi");
-	void* shit = dequeueMin(it);
-	void* balls = dequeueMin(it);
-	void* fuck = dequeueMin(it);
+	void* deq1 = dequeueMin(it);
+	void* deq2 = dequeueMin(it);
+	void* deq3 = dequeueMin(it);
 	//printf("%s\n", "done");
 	printArr(it);
 

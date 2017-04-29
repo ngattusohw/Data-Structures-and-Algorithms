@@ -63,7 +63,7 @@ Graph minSpanTree(Graph g){
 
 	Graph newGraph = makeGraph(numVerts(g), 1);
 	int root = 0;
-	MinPrio minQueue = makeQueue(comp, 10);//Change max size if need be
+	MinPrio minQueue = makeQueue(comp, numVerts(g));//Change max size if need be
 	int link[numVerts(g)];
 	Handle hold_handle[numVerts(g)];
 

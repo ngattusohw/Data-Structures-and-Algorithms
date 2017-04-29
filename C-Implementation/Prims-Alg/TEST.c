@@ -6,7 +6,7 @@
 #include "primmst.h"
 
 int main(){
-	GraphInfo gi = readGraphMakeSymm("ass.txt",MATRIX);
+	GraphInfo gi = readGraphMakeSymm("tits.txt",LIST);
 	Graph g = gi->graph;
 
 	gi->graph = minSpanTree(g);
