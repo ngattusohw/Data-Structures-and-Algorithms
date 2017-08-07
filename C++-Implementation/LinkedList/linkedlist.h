@@ -11,7 +11,7 @@ public:
 	int removeLast();
 	int removeAt(int index);
 	int getSize();
-	bool findElement(int index);
+	bool findElement(int elem);
 private:
 	int size;
 	class Node
