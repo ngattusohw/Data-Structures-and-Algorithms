@@ -12,6 +12,7 @@ public:
 	int removeAt(int index);
 	int getSize();
 	bool findElement(int elem);
+	void printElements();
 private:
 	int size;
 	class Node
@@ -19,7 +20,6 @@ private:
 	public:
 		Node();
 		~Node();
-	private:
 		Node* next;
 		int elem;
 	};

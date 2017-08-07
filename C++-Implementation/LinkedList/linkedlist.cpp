@@ -1,4 +1,5 @@
 #include "linkedlist.h"
+#include <stdio.h>
 
 linkedlist::linkedlist(){
 	Node* head = nullptr;
@@ -8,17 +9,18 @@ linkedlist::linkedlist(){
 
 
 linkedlist::~linkedlist(){
-	for(int x=0;x<size;x++){
+	printf("%s\n", "Being descructed Linked");
+	for(int x=0;x<size-1;x++){
 		removeLast();
 	}
-
+	printf("%s\n", "Done being deconstructed");
 	head = nullptr;
 	tail = nullptr;
 }
 
 linkedlist::Node::Node(){
-	Node* next = nullptr;
-	int elem = 0;
+	next = nullptr;
+	elem = 0;
 }
 
 linkedlist::Node::~Node(){
@@ -30,6 +32,7 @@ void linkedlist::insertLast(int elem){
 	Node* to_insert = new Node;
 	to_insert->elem = elem;
 	size++;
+	printf("%s %i\n", "Size is " , getSize());
 	if(head==nullptr){
 		head = to_insert;
 		tail = to_insert;
@@ -53,13 +56,15 @@ void linkedlist::insertAt(int index, int elem){
 		}
 		temp = current->next;
 		current->next = to_insert;
-		to_insert->temp;
+		to_insert->next = temp;
 		if(size-1==index){
 			tail = to_insert;
 		}
+		size++;
 	}else if(index==0){
 		to_insert->next = head;
 		head = to_insert;
+		size++;
 	}else{ //not in bounds
 		printf("%s\n", "Not in bounds!");
 	}
@@ -67,13 +72,20 @@ void linkedlist::insertAt(int index, int elem){
 
 
 int linkedlist::removeLast(){
+	if(head==tail){
+		int the_return = head->elem;
+		delete head;
+		size--;
+		return the_return;
+	}
 	Node* current = head;
-	while(current!=head){
+	for(int x=0;x<size-1;x++){
 		current = current->next;
 	}
 	int the_return = current->next->elem;
 	delete current->next;
 	tail = current;
+	size--;
 	return the_return;
 }
 
@@ -90,13 +102,20 @@ int linkedlist::removeAt(int index){
 		}
 		temp = current->next;
 		current->next = temp->next;
+		int the_return = temp->elem;
 		delete temp;
+		size--;
+		return the_return;
 	}else if(index==0){
-		Node temp = head->next;
+		Node* temp = head->next;
+		int the_return = head->elem;
 		delete head;
 		head = temp;
+		size--;
+		return the_return;
 	}else{ //not in bounds
 		printf("%s\n", "Not in bounds!");
+		return -1;
 	}
 }
 
@@ -107,7 +126,7 @@ int linkedlist::getSize(){
 
 
 bool linkedlist::findElement(int elem){
-	Node current = head;
+	Node* current = head;
 	for(int x=0;x<size;x++){
 		if(current->elem == elem){
 			return true;
@@ -119,6 +138,14 @@ bool linkedlist::findElement(int elem){
 	return false; //will be called if for loop is left
 }
 
+void linkedlist::printElements(){
+	Node* current = head;
+	printf("%i\n", getSize());
+	for(int x=0;x<size;x++){
+		printf("%i\n", current->elem);
+		current = current->next;
+	}
+}
 
 
 
