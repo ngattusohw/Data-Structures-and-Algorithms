@@ -1,7 +1,5 @@
 #include "linkedlist.h"
 
-
-
 linkedlist::linkedlist(){
 	Node* head = nullptr;
 	Node* tail = nullptr;
@@ -81,7 +79,6 @@ int linkedlist::removeLast(){
 
 
 int linkedlist::removeAt(int index){
-	[] [] [] []
 	if(size-1==index){
 		return removeLast();
 	}else if(!(index>size || index<0)){ //index is inbounds
