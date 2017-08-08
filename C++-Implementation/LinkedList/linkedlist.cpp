@@ -77,16 +77,17 @@ int linkedlist::removeLast(){
 		delete head;
 		size--;
 		return the_return;
+	}else{
+		Node* current = head;
+		for(int x=0;x<size-2;x++){
+			current = current->next;
+		}
+		int the_return = current->next->elem;
+		delete current->next;
+		tail = current;
+		size--;
+		return the_return;
 	}
-	Node* current = head;
-	for(int x=0;x<size-1;x++){
-		current = current->next;
-	}
-	int the_return = current->next->elem;
-	delete current->next;
-	tail = current;
-	size--;
-	return the_return;
 }
 
 
