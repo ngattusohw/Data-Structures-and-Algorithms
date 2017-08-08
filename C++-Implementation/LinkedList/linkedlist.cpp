@@ -51,8 +51,9 @@ void linkedlist::insertAt(int index, int elem){
 		int curr = 0;
 		Node* current = head;
 		Node* temp;
-		while(curr!=index){
+		while(curr!=index-1){
 			current = current->next;
+			curr++;
 		}
 		temp = current->next;
 		current->next = to_insert;
