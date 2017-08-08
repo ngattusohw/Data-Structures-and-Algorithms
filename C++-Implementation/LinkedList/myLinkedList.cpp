@@ -10,7 +10,7 @@ int main(int argc, char const *argv[]){
 	List.insertLast(4);
 
 	List.printElements();
-
+	printf("Finding Element:: %d \n", List.findElement(10));
 	List.insertAt(2,10);
 
 	List.printElements();
@@ -20,6 +20,8 @@ int main(int argc, char const *argv[]){
 	List.removeAt(0);
 
 	List.printElements();
+	printf("Finding Element:: %d \n", List.findElement(10));
+	
 	/* code */
 	return 0;
 }

@@ -73,50 +73,58 @@ void linkedlist::insertAt(int index, int elem){
 
 
 int linkedlist::removeLast(){
-	if(head==tail){
-		int the_return = head->elem;
-		delete head;
-		size--;
-		return the_return;
-	}else{
-		Node* current = head;
-		for(int x=0;x<size-2;x++){
-			current = current->next;
+	if(head!=nullptr){
+		if(head==tail){
+			int the_return = head->elem;
+			delete head;
+			size--;
+			return the_return;
+		}else{
+			Node* current = head;
+			for(int x=0;x<size-2;x++){
+				current = current->next;
+			}
+			int the_return = current->next->elem;
+			delete current->next;
+			tail = current;
+			size--;
+			return the_return;
 		}
-		int the_return = current->next->elem;
-		delete current->next;
-		tail = current;
-		size--;
-		return the_return;
+	}else{
+		return -1;
 	}
 }
 
 
 int linkedlist::removeAt(int index){
-	if(size-1==index){
-		return removeLast();
-	}else if(index==0){
-		Node* temp = head->next;
-		int the_return = head->elem;
-		delete head;
-		head = temp;
-		size--;
-		return the_return;
-	}else if(!(index>size || index<0)){ //index is inbounds
-		int curr = 0;
-		Node* current = head;
-		Node* temp;
-		while(curr!=index){
-			current = current->next;
+	if(head!=nullptr){
+		if(size-1==index){
+			return removeLast();
+		}else if(index==0){
+			Node* temp = head->next;
+			int the_return = head->elem;
+			delete head;
+			head = temp;
+			size--;
+			return the_return;
+		}else if(!(index>size || index<0)){ //index is inbounds
+			int curr = 0;
+			Node* current = head;
+			Node* temp;
+			while(curr!=index){
+				current = current->next;
+			}
+			temp = current->next;
+			current->next = temp->next;
+			int the_return = temp->elem;
+			delete temp;
+			size--;
+			return the_return;
+		}else{ //not in bounds
+			printf("%s\n", "Not in bounds!");
+			return -1;
 		}
-		temp = current->next;
-		current->next = temp->next;
-		int the_return = temp->elem;
-		delete temp;
-		size--;
-		return the_return;
-	}else{ //not in bounds
-		printf("%s\n", "Not in bounds!");
+	}else{
 		return -1;
 	}
 }
