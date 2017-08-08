@@ -10,6 +10,10 @@ public:
 	int getSize();
 	void insert(int elem);
 	int hash(int elem);
+	void adjust();
+	void increment();
+	void decrement();
+	bool search(int elem);
 private:
 	LinkedList list;
 	int* buckets;
