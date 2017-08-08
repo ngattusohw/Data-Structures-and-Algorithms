@@ -95,6 +95,13 @@ int linkedlist::removeLast(){
 int linkedlist::removeAt(int index){
 	if(size-1==index){
 		return removeLast();
+	}else if(index==0){
+		Node* temp = head->next;
+		int the_return = head->elem;
+		delete head;
+		head = temp;
+		size--;
+		return the_return;
 	}else if(!(index>size || index<0)){ //index is inbounds
 		int curr = 0;
 		Node* current = head;
@@ -106,13 +113,6 @@ int linkedlist::removeAt(int index){
 		current->next = temp->next;
 		int the_return = temp->elem;
 		delete temp;
-		size--;
-		return the_return;
-	}else if(index==0){
-		Node* temp = head->next;
-		int the_return = head->elem;
-		delete head;
-		head = temp;
 		size--;
 		return the_return;
 	}else{ //not in bounds
@@ -142,7 +142,6 @@ bool linkedlist::findElement(int elem){
 
 void linkedlist::printElements(){
 	Node* current = head;
-	printf("%i\n", getSize());
 	for(int x=0;x<size;x++){
 		printf("%i\n", current->elem);
 		current = current->next;

@@ -14,7 +14,12 @@ int main(int argc, char const *argv[]){
 	List.insertAt(2,10);
 
 	List.printElements();
-	printf("%s\n", "Really after");
+
+	List.removeLast();
+	List.removeAt(0);
+	List.removeAt(0);
+
+	List.printElements();
 	/* code */
 	return 0;
 }
