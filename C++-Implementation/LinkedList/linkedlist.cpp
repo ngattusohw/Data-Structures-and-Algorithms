@@ -2,9 +2,9 @@
 #include <stdio.h>
 
 linkedlist::linkedlist(){
-	Node* head = nullptr;
-	Node* tail = nullptr;
-	int size = 0;
+	head = nullptr;
+	tail = nullptr;
+	size = 0;
 }
 
 

@@ -9,17 +9,16 @@ public:
 	int getCapacity();
 	int getSize();
 	void insert(int elem);
-	int hash(int elem);
 	void adjust();
 	void increment();
 	void decrement();
 	bool search(int elem);
 private:
-	LinkedList list;
-	int* buckets;
+	LinkedList* buckets;
 	int size;
 	int cap;
 	double load;
+	int hash(int elem);
 };
 
 
